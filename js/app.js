@@ -31,6 +31,7 @@ class SimonSay {
         this.points = 0
         this.level = 0
         this.indexRound = 0
+        this.rounds = 0
         this.round = null
         this.showMessage = showMessage
         this.showRound = showRound
@@ -68,6 +69,7 @@ class SimonSay {
     async nextRound() {
         this.showMessage("Siguiente round")
         this.points += levels[this.level].pointsByRound
+        this.rounds++
         if (this.points > levels[this.level].pointsToPass) {
             this.level++
             this.showMessage("Siguiente nivel")

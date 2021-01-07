@@ -5,11 +5,29 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="./css/index.css" />
         <link rel="stylesheet" href="./css/colors.css" />
+        <link rel="stylesheet" href="./css/information.css" />
         <title>Simon dice</title>
     </head>
     <body>
         <h1 class="title">¡Simon dice!</h1>
-        <p id="message"></p>
+        <nav class="information">
+            <div id="message" class="information__item">
+                <label for="" class="information__label">Round #</label>
+                <p id="round" class="information__value">11</p>
+            </div>
+            <div id="message" class="information__item">
+                <label for="" class="information__label">Dificultad</label>
+                <p id="level" class="information__value">Facil</p>
+            </div>
+            <div id="message" class="information__item">
+                <label for="" class="information__label">Puntos</label>
+                <p class="information__value">10</p>
+            </div>
+            <div class="information__item">
+                <label for="" class="information__label"></label>
+                <p id="message" class="information__value"></p>
+            </div>
+        </nav>
         <section class="colors">
             <div id="green" class="colors__item colors__item--green"></div>
             <div id="red" class="colors__item colors__item--red"></div>
