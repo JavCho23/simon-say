@@ -1,7 +1,7 @@
 const colors = ["green", "red", "blue", "yellow"]
 const levels = [
     {
-        name: "Facil",
+        name: "Fácil",
         pointsByRound: 1,
         pointsToPass: 3,
         difficulty: 3,
@@ -27,19 +27,21 @@ const levels = [
 ]
 
 class SimonSay {
-    constructor(showMessage, showRound, onError) {
+    constructor(showMessage, showRound, onError, updateInformation) {
         this.points = 0
         this.level = 0
         this.indexRound = 0
-        this.rounds = 0
+        this.rounds = 1
         this.round = null
         this.showMessage = showMessage
         this.showRound = showRound
         this.onError = onError
+        this.updateInformation = updateInformation
     }
     async run() {
         this.round = this.constructRound(colors, levels[this.level])
         console.log(this.round)
+        this.updateInformation()
         await this.showRound(this.round)
     }
     constructRound(colors, level) {
@@ -76,6 +78,7 @@ class SimonSay {
             this.level++
             this.showMessage("Siguiente nivel")
         }
+        this.updateInformation()
         if (this.level.length >= this.level) this.endGame()
         this.round = this.constructRound(colors, levels[this.level])
         await this.showRound(this.round)
@@ -96,6 +99,7 @@ class HTMLSimonSay {
         simonsay.showMessage = this.showMessage.bind(this)
         simonsay.showRound = this.showRound.bind(this)
         simonsay.onError = this.onError.bind(this)
+        simonsay.updateInformation = this.updateInformation
         this.colors = {
             green: document.getElementById("green"),
             red: document.getElementById("red"),
@@ -103,13 +107,21 @@ class HTMLSimonSay {
             blue: document.getElementById("blue"),
         }
         simonsay.run()
+
         this.colors.green.addEventListener("click", this.selectColor)
         this.colors.red.addEventListener("click", this.selectColor)
         this.colors.yellow.addEventListener("click", this.selectColor)
         this.colors.blue.addEventListener("click", this.selectColor)
     }
     showMessage(message) {
-        document.getElementById("message").innerHTML = message
+        //document.getElementById("message").innerText = message
+        console.log(message);
+    }
+    updateInformation() {
+        document.getElementById("round").innerText = simonsay.rounds
+        document.getElementById("level").innerText = levels[simonsay.level].name
+        document.getElementById("points").innerText = simonsay.points
+        console.log(simonsay.rounds, simonsay.rounds, simonsay.level)
     }
     async showRound(round) {
         for (const color of round) {
