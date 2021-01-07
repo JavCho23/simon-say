@@ -58,7 +58,9 @@ class SimonSay {
         if (!this.round) throw new Error("Game is not started")
         if (this.round[this.indexRound] != color) {
             this.indexRound = 0
-            return await this.onError()
+            await this.onError()
+            this.showRound(this.round)
+            return
         }
         await this.nextColor()
     }
