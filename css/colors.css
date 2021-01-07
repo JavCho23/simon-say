@@ -1,0 +1,26 @@
+.colors {
+    display: grid;
+    width: 60vw;
+    grid-template-columns: repeat(2, 1fr);
+}
+.colors__item {
+    padding-top: 100%; /* 1:1 Aspect Ratio */
+    width: 100%;
+    opacity: 0.3;
+}
+.colors__item--red {
+    background-color: red;
+    border-radius: 0 100% 0 0;
+}
+.colors__item--yellow {
+    background-color: yellow;
+    border-radius: 0 0 100% 0;
+}
+.colors__item--blue {
+    background-color: blue;
+    border-radius: 0 0 0 100%;
+}
+.colors__item--green {
+    background-color: green;
+    border-radius: 100% 0 0 0;
+}
