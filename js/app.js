@@ -35,14 +35,15 @@ class SimonSay {
         this.showMessage = showMessage
         this.showRound = showRound
     }
-    run() {
+    async run() {
         this.round = this.constructRound(colors, levels[this.level])
-        this.showRound(this.round)
+        console.log(this.round)
+        await this.showRound(this.round)
     }
     constructRound(colors, level) {
         const round = []
-        for (let index = 0; index < level.difficulsty; index++) {
-            round.push(this.ramdonColor(colors))
+        for (let index = 0; index < level.difficulty; index++) {
+            round.push(this.getRamdonColor(colors))
         }
         return round
     }
@@ -50,16 +51,17 @@ class SimonSay {
     getRamdonColor(colors) {
         return colors[Math.floor(Math.random() * (colors.length - 0))]
     }
-    selectColor(color) {
-        if (this.round) throw new Error("Game is not started")
+    async selectColor(color) {
+        console.log(color)
+        if (!this.round) throw new Error("Game is not started")
         if (this.round[this.indexRound] != color) return null
-        this.nextColor()
+        await this.nextColor()
     }
-    nextColor() {
+    async nextColor() {
         this.indexRound++
-        if (this.round.length >= this.indexRound) this.nextRound()
+        if (this.round.length == this.indexRound) await this.nextRound()
     }
-    nextRound() {
+    async nextRound() {
         this.showMessage("Siguiente round")
         this.points += levels[this.level].pointsByRound
         if (this.points > levels[this.level].pointsToPass) {
@@ -68,7 +70,7 @@ class SimonSay {
         }
         if (this.level.length >= this.level) this.endGame()
         this.round = this.constructRound(colors, levels[this.level])
-        this.showRound(this.round)
+        await this.showRound(this.round)
         this.indexRound = 0
     }
     endGame() {
@@ -77,4 +79,53 @@ class SimonSay {
     }
 }
 
+const sleep = (milliseconds) => {
+    return new Promise((resolve) => setTimeout(resolve, milliseconds))
+}
+const simonsay = new SimonSay()
+class HTMLSimonSay {
+    constructor() {
+        simonsay.showMessage = this.showMessage.bind(this)
+        simonsay.showRound = this.showRound.bind(this)
 
+        this.colors = {
+            green: document.getElementById("green"),
+            red: document.getElementById("red"),
+            yellow: document.getElementById("yellow"),
+            blue: document.getElementById("blue"),
+        }
+        simonsay.run()
+        this.colors.green.addEventListener("click", this.selectColor)
+        this.colors.red.addEventListener("click", this.selectColor)
+        this.colors.yellow.addEventListener("click", this.selectColor)
+        this.colors.blue.addEventListener("click", this.selectColor)
+    }
+    showMessage(message) {
+        document.getElementById("message").innerHTML = message
+    }
+    async showRound(round) {
+        for (const color of round) {
+            await this.illuminateColor(color)
+        }
+
+        await this.offAllColors()
+    }
+    async illuminateColor(color) {
+        await this.offAllColors()
+        this.colors[color].style.opacity = 1
+        await sleep(800)
+    }
+    async offAllColors() {
+        for (const color in this.colors) {
+            const element = this.colors[color]
+            element.style.opacity = 0.3
+        }
+        await sleep(500)
+    }
+    async selectColor(event) {
+        console.log(event.srcElement)
+        await simonsay.selectColor(event.srcElement.id)
+    }
+}
+
+const simon = new HTMLSimonSay()
