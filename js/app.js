@@ -25,3 +25,51 @@ const levels = [
         difficulty: 18,
     },
 ]
+
+class SimonSay {
+    constructor(showMessage) {
+        this.points = 0
+        this.level = 0
+        this.indexRound = 0
+        this.round = null
+        this.showMessage = showMessage
+    }
+    run() {
+        this.round = this.constructRound(colors, levels[this.level])
+    }
+    constructRound(colors, level) {
+        const round = []
+        for (let index = 0; index < level.difficulsty; index++) {
+            round.push(this.ramdonColor(colors))
+        }
+        return round
+    }
+
+    getRamdonColor(colors) {
+        return colors[Math.floor(Math.random() * (colors.length - 0))]
+    }
+    selectColor(color) {
+        if (this.round) throw new Error("Game is not started")
+        if (this.round[this.indexRound] != color) return null
+        this.nextColor()
+    }
+    nextColor() {
+        this.indexRound++
+        if (this.round.length >= this.indexRound) this.nextRound()
+    }
+    nextRound() {
+        this.showMessage("Siguiente round")
+        this.points += levels[this.level].pointsByRound
+        if (this.points > levels[this.level].pointsToPass) {
+            this.level++
+            this.showMessage("Siguiente nivel")
+        }
+        if (this.level.length >= this.level) this.endGame()
+        this.round = this.constructRound(colors, levels[this.level])
+        this.indexRound = 0
+    }
+    endGame() {
+        console.log("Juego terminado")
+        this.showMessage("Juego terminado")
+    }
+}
