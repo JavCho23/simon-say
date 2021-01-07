@@ -3,6 +3,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     width: 90%;
+    max-width: 700px;
     margin: 2em 0;
 }
 .information__item {
