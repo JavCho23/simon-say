@@ -27,13 +27,14 @@ const levels = [
 ]
 
 class SimonSay {
-    constructor(showMessage, showRound) {
+    constructor(showMessage, showRound, onError) {
         this.points = 0
         this.level = 0
         this.indexRound = 0
         this.round = null
         this.showMessage = showMessage
         this.showRound = showRound
+        this.onError = onError
     }
     async run() {
         this.round = this.constructRound(colors, levels[this.level])
@@ -54,7 +55,10 @@ class SimonSay {
     async selectColor(color) {
         console.log(color)
         if (!this.round) throw new Error("Game is not started")
-        if (this.round[this.indexRound] != color) return null
+        if (this.round[this.indexRound] != color) {
+            this.indexRound = 0
+            return await this.onError()
+        }
         await this.nextColor()
     }
     async nextColor() {
@@ -87,7 +91,7 @@ class HTMLSimonSay {
     constructor() {
         simonsay.showMessage = this.showMessage.bind(this)
         simonsay.showRound = this.showRound.bind(this)
-
+        simonsay.onError = this.onError.bind(this)
         this.colors = {
             green: document.getElementById("green"),
             red: document.getElementById("red"),
@@ -125,6 +129,16 @@ class HTMLSimonSay {
     async selectColor(event) {
         console.log(event.srcElement)
         await simonsay.selectColor(event.srcElement.id)
+    }
+    async onError() {
+        for (let index = 0; index < 3; index++) {
+            for (const color in this.colors) {
+                const element = this.colors[color]
+                element.style.opacity = 1
+            }
+            await sleep(500)
+            await this.offAllColors()
+        }
     }
 }
 
