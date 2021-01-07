@@ -27,15 +27,17 @@ const levels = [
 ]
 
 class SimonSay {
-    constructor(showMessage) {
+    constructor(showMessage, showRound) {
         this.points = 0
         this.level = 0
         this.indexRound = 0
         this.round = null
         this.showMessage = showMessage
+        this.showRound = showRound
     }
     run() {
         this.round = this.constructRound(colors, levels[this.level])
+        this.showRound(this.round)
     }
     constructRound(colors, level) {
         const round = []
@@ -66,6 +68,7 @@ class SimonSay {
         }
         if (this.level.length >= this.level) this.endGame()
         this.round = this.constructRound(colors, levels[this.level])
+        this.showRound(this.round)
         this.indexRound = 0
     }
     endGame() {
@@ -73,3 +76,5 @@ class SimonSay {
         this.showMessage("Juego terminado")
     }
 }
+
+
